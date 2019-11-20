@@ -1,12 +1,11 @@
 const express = require('express');
-const db = require("./database.js");
+const database = require("./database.js");
 const uuidv4 = require('uuid/v4');
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
 const jwt = require("jsonwebtoken");
 const mongoose = require('mongoose');
 const app = express();
-const path = require('path');
 const formidable = require('formidable');
 const FileReader = require("filereader");
 
@@ -80,5 +79,5 @@ function verifyToken(req,res,next) {
     }
 }
 
-app.listen(5000,"192.168.122.21");
+app.listen(5001,"192.168.122.21");
 
