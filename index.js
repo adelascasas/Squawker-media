@@ -23,13 +23,13 @@ app.use((req,res,next) => {
 app.post('/addmedia',verifyToken ,(req, res) => {
     mongoose.model('blacklist').findOne({token: req.token}).exec().then((doc) => {
         if(doc){
-             res.status(500);
+             res.status(400);
              res.json({status: 'error', error: "you have been logged out"}); 
         }
         else{
             jwt.verify(req.token, 'MySecretKey',(err, data)=>{
                 if(err) {
-                    res.status(500);
+                    res.status(400);
                     res.json({status:'error', error:"error verifying key"});}
                 else{
                     new formidable.IncomingForm().parse(req,(err,fields,files) => {
@@ -49,7 +49,7 @@ app.post('/addmedia',verifyToken ,(req, res) => {
                                    (err, result) => {if(err){console.log(err);}}
                                 )
                                 res.status(200).json({status:'OK', id});
-                            }).catch((err) => {res.status(500).json({status:"error", error:"error adding media"});});
+                            }).catch((err) => {res.status(400).json({status:"error", error:"error adding media"});});
                         };
                    })
                 }   
@@ -62,7 +62,7 @@ app.get('/media/:id',(req,res) => {
       database.getMedia(req.params.id).then((result) =>{
         res.writeHead(200,{'Content-type':result.rows[0].extension});
         res.end(result.rows[0].content); 
-      }).catch((err)=> {res.status(500).json({status:"error", error:"media not found"});});
+      }).catch((err)=> {res.status(400).json({status:"error", error:"media not found"});});
 });
 
 
@@ -70,7 +70,7 @@ app.get('/media/:id',(req,res) => {
 function verifyToken(req,res,next) {
     let token = req.cookies['token'];
     if(!token){ 
-        res.status(500);
+        res.status(400);
         res.json({status: 'error', error: 'User not logged in'});
     }
     else{
@@ -80,4 +80,3 @@ function verifyToken(req,res,next) {
 }
 
 app.listen(5000,"192.168.122.37" );
-
